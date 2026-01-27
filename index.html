@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Speed of Sound – Resonance Tube</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f7fa;
+      margin: 0;
+      padding: 20px;
+      line-height: 1.5;
+    }
+    h1, h2 { color: #1f2937; }
+    .container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      max-width: 1200px;
+      margin: auto;
+    }
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    canvas {
+      width: 100%;
+      height: 260px;
+      background: #0f172a;
+      border-radius: 8px;
+    }
+    label { display: block; margin-top: 10px; font-weight: bold; }
+    input, select { width: 100%; }
+    .note { font-size: 0.9em; color: #374151; }
+    .row { margin-top: 8px; }
+  </style>
+</head>
+<body>
+
+<h1>Speed of Sound in Air – Resonance Tube Experiment</h1>
+<p>Explore how temperature and boundary impedance affect standing waves in a closed tube.</p>
+
+<div class="container">
+
+  <div class="card">
+    <h2>Standing Wave Visualization</h2>
+    <canvas id="waveCanvas" width="500" height="260"></canvas>
+
+    <label>Mode</label>
+    <select id="mode">
+      <option value="displacement">Displacement</option>
+      <option value="pressure">Pressure</option>
+    </select>
+
+    <label>Frequency (Hz)</label>
+    <input type="range" id="freq" min="100" max="600" value="256" />
+    <span id="freqVal">256 Hz</span>
+
+    <label>Air Column Length (m)</label>
+    <input type="range" id="length" min="0.1" max="1.0" step="0.01" value="0.33" />
+    <span id="lenVal">0.33 m</span>
+
+    <label>Air Temperature (°C)</label>
+    <input type="range" id="temp" min="0" max="40" value="20" />
+    <span id="tempVal">20 °C</span>
+
+    <label>Liquid Impedance (relative)</label>
+    <input type="range" id="imp" min="0.2" max="5" step="0.1" value="1" />
+    <span id="impVal">1.0</span>
+
+    <p class="note">
+      • Closed end: displacement node / pressure antinode<br>
+      • Open end: displacement antinode / pressure node
+    </p>
+  </div>
+
+  <div class="card">
+    <h2>Conceptual Links</h2>
+
+    <h3>1. Temperature and Sound Speed</h3>
+    <p>In gases, sound speed depends on molecular motion. Warmer air → faster particle motion → quicker pressure transfer.</p>
+    <table border="1" cellpadding="6" cellspacing="0">
+      <tr><th>Temperature (°C)</th><th>Speed of Sound (m/s)</th><th>Effect on Resonance</th></tr>
+      <tr><td>0</td><td>331</td><td>Shorter wavelength → shorter resonance length</td></tr>
+      <tr><td>20</td><td>343</td><td>Typical classroom value</td></tr>
+      <tr><td>40</td><td>355</td><td>Longer wavelength → resonance shifts upward</td></tr>
+    </table>
+
+    <h3>2. Boundary Reflection and Liquid Impedance</h3>
+    <p>Reflection strength depends on acoustic impedance mismatch between air and the liquid surface.</p>
+    <table border="1" cellpadding="6" cellspacing="0">
+      <tr><th>Relative Liquid Impedance</th><th>Reflection Strength</th><th>Observed Pattern</th></tr>
+      <tr><td>~1</td><td>Weak</td><td>Poor standing wave, blurred nodes</td></tr>
+      <tr><td>2–3</td><td>Strong</td><td>Clear nodes and antinodes (water, glycerol)</td></tr>
+      <tr><td>5+</td><td>Very strong</td><td>Almost rigid boundary</td></tr>
+    </table>
+
+    <h3>3. Pressure vs Displacement Standing Waves</h3>
+    <p>These represent different physical variables of the same wave. They are spatially shifted by a quarter wavelength.</p>
+    <table border="1" cellpadding="6" cellspacing="0">
+      <tr><th>Location in Tube</th><th>Displacement Wave</th><th>Pressure Wave</th></tr>
+      <tr><td>Closed (water) end</td><td>Node</td><td>Antinode</td></tr>
+      <tr><td>Open end</td><td>Antinode</td><td>Node</td></tr>
+      <tr><td>Meaning</td><td>Air particles cannot move</td><td>Pressure variation is largest</td></tr>
+    </table>
+
+    <h3>4. Resonance Condition (Closed Tube)</h3>
+    <table border="1" cellpadding="6" cellspacing="0">
+      <tr><th>Resonance Number</th><th>Air Column Length</th><th>Wave Pattern</th></tr>
+      <tr><td>1st</td><td>L = λ/4</td><td>Node → Antinode</td></tr>
+      <tr><td>2nd</td><td>L = 3λ/4</td><td>Extra node in tube</td></tr>
+      <tr><td>3rd</td><td>L = 5λ/4</td><td>Higher harmonic</td></tr>
+    </table>
+  </div>
+
+</div>
+
+<script>
+const canvas = document.getElementById("waveCanvas");
+const ctx = canvas.getContext("2d");
+
+const freqSlider = document.getElementById("freq");
+const lenSlider = document.getElementById("length");
+const tempSlider = document.getElementById("temp");
+const impSlider = document.getElementById("imp");
+const modeSelect = document.getElementById("mode");
+
+const freqVal = document.getElementById("freqVal");
+const lenVal = document.getElementById("lenVal");
+const tempVal = document.getElementById("tempVal");
+const impVal = document.getElementById("impVal");
+
+let t = 0;
+
+function drawWave() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  const f = Number(freqSlider.value);
+  const L = Number(lenSlider.value);
+  const T = Number(tempSlider.value);
+  const Zratio = Number(impSlider.value);
+  const mode = modeSelect.value;
+
+  const c = 331 + 0.6 * T;
+  const lambda = c / f;
+  const k = 2 * Math.PI / lambda;
+
+  const reflection = (Zratio - 1) / (Zratio + 1);
+  const amplitudeScale = Math.abs(reflection);
+
+  ctx.beginPath();
+  ctx.strokeStyle = mode === "displacement" ? "#38bdf8" : "#fbbf24";
+  ctx.lineWidth = 2;
+
+  for (let x = 0; x < canvas.width; x++) {
+    const pos = (x / canvas.width) * L;
+    let y;
+    if (mode === "displacement") {
+      y = amplitudeScale * Math.sin(k * pos) * Math.cos(2 * Math.PI * f * t);
+    } else {
+      y = amplitudeScale * Math.cos(k * pos) * Math.sin(2 * Math.PI * f * t);
+    }
+    const drawY = canvas.height / 2 - y * 80;
+    if (x === 0) ctx.moveTo(x, drawY);
+    else ctx.lineTo(x, drawY);
+  }
+  ctx.stroke();
+
+  ctx.fillStyle = "#f87171";
+  ctx.fillRect(0, 0, 6, canvas.height);
+  ctx.fillStyle = "#4ade80";
+  ctx.fillRect(canvas.width - 6, 0, 6, canvas.height);
+}
+
+function animate() {
+  t += 0.01;
+  drawWave();
+  requestAnimationFrame(animate);
+}
+
+freqSlider.oninput = () => freqVal.textContent = freqSlider.value + " Hz";
+lenSlider.oninput = () => lenVal.textContent = lenSlider.value + " m";
+tempSlider.oninput = () => tempVal.textContent = tempSlider.value + " °C";
+impSlider.oninput = () => impVal.textContent = Number(impSlider.value).toFixed(1);
+
+animate();
+</script>
+
+</body>
+</html>
+

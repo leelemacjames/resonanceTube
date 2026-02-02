@@ -25,12 +25,43 @@
     .ok { background:#ecfdf5; border-color:#10b98133; }
     .warn { background:#fffbeb; border-color:#f59e0b33; }
     .bad { background:#fef2f2; border-color:#ef444433; }
+  
+    .linkbar { display:flex; flex-wrap:wrap; gap:10px; margin: 14px 0 18px; }
+    .btnlink {
+      display:inline-flex; align-items:center; gap:8px;
+      padding:10px 12px; border-radius:10px;
+      background:#111827; color:#ffffff; text-decoration:none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.10);
+      font-weight:600; font-size:0.95em;
+    }
+    .btnlink:hover { filter: brightness(1.08); }
+    .btnlink.secondary { background:#1d4ed8; }
+    .btnlink.tertiary { background:#059669; }
+    .card.full { grid-column: 1 / -1; }
+    .quiz q { quotes: "“" "”" "‘" "’"; }
+    .quiz .qblock { border:1px solid #e5e7eb; border-radius:10px; padding:12px; margin:10px 0; background:#fafafa; }
+    .quiz .choices { margin:8px 0 0 0; padding-left: 18px; }
+    .quiz .choices li { margin:6px 0; }
+    .quiz .feedback { margin-top:8px; font-weight:700; }
+    .quiz button { margin-top:10px; padding:10px 12px; border:0; border-radius:10px; background:#111827; color:#fff; font-weight:700; cursor:pointer; }
+    .quiz button:hover { filter: brightness(1.08); }
+    details { background:#fff; border:1px solid #e5e7eb; border-radius:10px; padding:10px 12px; margin:10px 0; }
+    details summary { cursor:pointer; font-weight:700; }
+
   </style>
 </head>
 <body>
 
 <h1>Speed of Sound in Air – Resonance Tube Experiment</h1>
 <p class="muted">Adjust the sliders and watch how temperature (sound speed), impedance (reflection), and resonance conditions shape the wave.</p>
+
+
+<div class="linkbar" aria-label="External physics applets">
+  <a class="btnlink" href="https://physics.bu.edu/~duffy/HTML5/longitudinal_standing_wave.html" target="_blank" rel="noopener">Longitudinal Standing Wave</a>
+  <a class="btnlink secondary" href="https://physics.bu.edu/~duffy/HTML5/transverse_standing_wave.html" target="_blank" rel="noopener">Transverse Standing Wave</a>
+  <a class="btnlink tertiary" href="https://physics.bu.edu/~duffy/HTML5/speed_of_sound.html" target="_blank" rel="noopener">Speed of Sound</a>
+</div>
+
 
 <div class="container">
 
@@ -123,6 +154,149 @@
       <tr><td>3rd</td><td><span id="L5"></span> m</td><td><span id="d5"></span></td></tr>
     </table>
   </div>
+
+  <div class="card full">
+    <h2>Practice Questions</h2>
+    <p class="muted">These questions are taken from the attached worksheet, and are meant to pair with the simulations above.</p>
+
+    <h3>Multiple-choice (MCQ)</h3>
+    <div class="quiz" id="mcqQuiz">
+      <div class="qblock" data-answer="B">
+        <div><b>1.</b> Standing waves form only when:</div>
+        <ol class="choices" type="A">
+          <li><label><input type="radio" name="q1" value="A"> The amplitude of the wave is large</label></li>
+          <li><label><input type="radio" name="q1" value="B"> The frequency matches a natural resonant frequency of the system</label></li>
+          <li><label><input type="radio" name="q1" value="C"> Energy is continuously added regardless of frequency</label></li>
+          <li><label><input type="radio" name="q1" value="D"> The wavelength exceeds the size of the medium</label></li>
+        </ol>
+        <div class="feedback" id="fb1"></div>
+      </div>
+
+      <div class="qblock" data-answer="C">
+        <div><b>2.</b> Resonance causes:</div>
+        <ol class="choices" type="A">
+          <li><label><input type="radio" name="q2" value="A"> Conversion of waves into particles</label></li>
+          <li><label><input type="radio" name="q2" value="B"> A collapse of the wave because of destructive interference</label></li>
+          <li><label><input type="radio" name="q2" value="C"> A rapid increase in amplitude due to energy accumulation</label></li>
+          <li><label><input type="radio" name="q2" value="D"> A change in mass of the medium</label></li>
+        </ol>
+        <div class="feedback" id="fb2"></div>
+      </div>
+
+      <div class="qblock" data-answer="B">
+        <div><b>3.</b> In the Bohr model, only certain orbits are allowed because:</div>
+        <ol class="choices" type="A">
+          <li><label><input type="radio" name="q3" value="A"> Electrons move randomly</label></li>
+          <li><label><input type="radio" name="q3" value="B"> Only specific wavelengths fit perfectly into a stable standing wave pattern</label></li>
+          <li><label><input type="radio" name="q3" value="C"> Electrons are pushed around by gravity</label></li>
+          <li><label><input type="radio" name="q3" value="D"> Electrons repel photons</label></li>
+        </ol>
+        <div class="feedback" id="fb3"></div>
+      </div>
+
+      <div class="qblock" data-answer="C">
+        <div><b>4.</b> Photons could not escape before recombination because:</div>
+        <ol class="choices" type="A">
+          <li><label><input type="radio" name="q4" value="A"> There were no photons yet</label></li>
+          <li><label><input type="radio" name="q4" value="B"> The universe had no atoms</label></li>
+          <li><label><input type="radio" name="q4" value="C"> Continuous scattering prevented photons from travelling freely</label></li>
+          <li><label><input type="radio" name="q4" value="D"> Gravity trapped light</label></li>
+        </ol>
+        <div class="feedback" id="fb4"></div>
+      </div>
+
+      <button type="button" id="checkMcqBtn">Check answers</button>
+      <p class="muted" id="mcqScore" style="margin-top:10px;"></p>
+    </div>
+
+    <h3>Longer Q&amp;A (SL &amp; HL)</h3>
+
+    <details>
+      <summary>Q1 — Standing Waves and Resonance (wire fixed at both ends)</summary>
+      <p><b>Prompt:</b> A metal wire of length 0.80 m is fixed at both ends. The fundamental resonant frequency is 120 Hz.</p>
+      <ol type="a">
+        <li>Define the term <i>standing wave</i>. (2)</li>
+        <li>Draw and label a diagram showing the fundamental mode and the second harmonic. (2)</li>
+        <li>State the relationship between the wavelength of the fundamental and the length of the wire. (1)</li>
+        <li>Calculate the wave speed. (2)</li>
+        <li>Explain why large amplitude vibrations occur when the wire is driven close to its natural frequency. (3)</li>
+      </ol>
+      <p><b>Model answer (outline):</b></p>
+      <ul>
+        <li>Standing wave: superposition of two identical waves travelling in opposite directions → fixed nodes and antinodes.</li>
+        <li>Fundamental: one antinode; second harmonic: two antinodes (with nodes at both ends).</li>
+        <li>Fundamental relation: λ<sub>1</sub> = 2L.</li>
+        <li>Wave speed: v = fλ = 120 × (2×0.80) = 192 m/s.</li>
+        <li>Resonance: driving near a natural frequency keeps the forcing in phase → constructive interference → energy accumulates → large amplitude.</li>
+      </ul>
+    </details>
+
+    <details>
+      <summary>Q2 — Bohr Quantisation and Standing Waves (hydrogen)</summary>
+      <ol type="a">
+        <li>State the standing-wave condition for an electron orbit in the Bohr model. (2)</li>
+        <li>Explain how hydrogen’s discrete emission spectrum provides evidence for this model. (3)</li>
+        <li>Calculate the wavelength of the emitted photon when an electron falls from n = 3 to n = 2, using E<sub>n</sub> = −13.6/n<sup>2</sup> eV and hc = 1240 eV·nm. (3)</li>
+      </ol>
+      <p><b>Model answer (outline):</b></p>
+      <ul>
+        <li>Condition: 2πr = nλ (n = 1, 2, 3, ...).</li>
+        <li>Line spectrum implies quantised energy levels; transitions emit/absorb photons with ΔE = hf = hc/λ.</li>
+        <li>E<sub>3</sub> = −13.6/9 = −1.51 eV; E<sub>2</sub> = −13.6/4 = −3.40 eV → ΔE = 1.89 eV → λ = 1240/1.89 ≈ 656 nm.</li>
+      </ul>
+    </details>
+
+    <details>
+      <summary>Q3 — Antenna Resonance (HL)</summary>
+      <ol type="a">
+        <li>Explain why only certain frequencies are efficiently received by an antenna. (3)</li>
+        <li>An antenna of length 1.5 m resonates at the half-wavelength mode. Calculate the resonant frequency using c = 3.0×10<sup>8</sup> m/s. (3)</li>
+        <li>Explain the analogy between tuning a radio and exciting a particular Bohr orbit. (3)</li>
+      </ol>
+      <p><b>Model answer (outline):</b></p>
+      <ul>
+        <li>Standing EM waves form on the antenna; when length matches an allowed fraction of λ, reflections reinforce (constructive interference) → strong currents.</li>
+        <li>Half-wave: λ = 2L = 3.0 m → f = c/λ = (3.0×10<sup>8</sup>)/3.0 = 1.0×10<sup>8</sup> Hz.</li>
+        <li>Radio tuning selects one resonant frequency (LC circuit), just as Bohr orbits allow only integer-wavelength standing states; non-resonant states are suppressed.</li>
+      </ul>
+    </details>
+
+    <details>
+      <summary>Q4 — CMB and Standing Waves in the Early Universe (HL)</summary>
+      <ol type="a">
+        <li>Explain why photons could not travel freely before recombination. (2)</li>
+        <li>Describe how acoustic standing waves formed in the early-universe plasma. (3)</li>
+        <li>The CMB power spectrum shows discrete peaks. Explain how this supports standing-wave behaviour. (3)</li>
+        <li>Discuss the analogy between standing waves in a cavity and resonant photon modes at the surface of last scattering. (4)</li>
+      </ol>
+      <p><b>Model answer (outline):</b></p>
+      <ul>
+        <li>Photon trapping: frequent Thomson scattering off free electrons → very short mean free path → opaque universe.</li>
+        <li>Gravity compresses overdensities; radiation pressure pushes back → oscillations (compressions/rarefactions) in photon–baryon fluid.</li>
+        <li>Peaks correspond to modes that completed specific fractions of oscillations by recombination → harmonic structure indicates standing waves.</li>
+        <li>Like a cavity, geometry/horizon size selects which modes “fit”; resonant modes survive and are imprinted at recombination, while non-resonant modes are damped.</li>
+      </ul>
+    </details>
+
+    <details>
+      <summary>Q5 — Data-based CMB Peaks (HL)</summary>
+      <ol type="a">
+        <li>State the physical meaning of the first acoustic peak. (2)</li>
+        <li>The position corresponds to about 1° on the sky. Explain why this represents the fundamental mode. (3)</li>
+        <li>Explain why higher-order peaks appear at integer multiples of the fundamental frequency. (3)</li>
+        <li>Evaluate: “The ripples in the CMB are like the harmonics of a musical instrument.” (4)</li>
+      </ol>
+      <p><b>Model answer (outline):</b></p>
+      <ul>
+        <li>First peak: largest-scale compression mode (fundamental) that could oscillate coherently by recombination.</li>
+        <li>~1° corresponds to the horizon-sized scale at recombination: larger scales couldn’t oscillate coherently; hence this is the fundamental.</li>
+        <li>Higher peaks: modes that completed additional half-cycles → harmonic series (approx. integer multiples).</li>
+        <li>Analogy is useful (discrete modes from boundary conditions) but limited (expansion + gravity–radiation coupling ≠ ideal instrument).</li>
+      </ul>
+    </details>
+
+  </div>
+
 
 </div>
 
@@ -365,10 +539,50 @@ function tick(){
 
 updateUI();
 tick();
+
+// --- MCQ quiz logic ---
+const checkMcqBtn = document.getElementById("checkMcqBtn");
+if (checkMcqBtn){
+  checkMcqBtn.addEventListener("click", () => {
+    const blocks = Array.from(document.querySelectorAll("#mcqQuiz .qblock"));
+    let correct = 0;
+    blocks.forEach((block, i) => {
+      const ans = block.getAttribute("data-answer");
+      const qn = "q" + (i+1);
+      const chosen = (document.querySelector(`input[name="${qn}"]:checked`) || {}).value;
+      const fb = document.getElementById("fb" + (i+1));
+      if (!chosen){
+        fb.textContent = "Choose an answer.";
+        fb.style.color = "#b91c1c";
+        return;
+      }
+      if (chosen === ans){
+        correct += 1;
+        fb.textContent = "Correct ✔";
+        fb.style.color = "#047857";
+      } else {
+        fb.textContent = `Not quite — correct answer is ${ans}.`;
+        fb.style.color = "#b45309";
+      }
+    });
+    const scoreEl = document.getElementById("mcqScore");
+    if (scoreEl) scoreEl.textContent = `Score: ${correct} / ${blocks.length}`;
+  });
+}
+
 </script>
 
 </body>
 </html>
+
+
+
+
+
+
+
+
+
 
 
 
